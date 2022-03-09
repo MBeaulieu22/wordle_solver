@@ -17,8 +17,6 @@ class Trie:
 
     def get_possible_words(self):
         possible_words = self.get_possible_words_helper(self.head_node, "", self.must_contain.copy())
-        if not possible_words:
-            print(self.must_contain)
         return possible_words
 
     def get_possible_words_helper(self, node, prefix_string, must_contain):
@@ -31,13 +29,15 @@ class Trie:
                 return []
 
         for child in node.children.items():
-            if child[0] in must_contain:
-                must_contain.remove(child[0])
+            must_contain_copy = must_contain.copy()
+            if child[0] in must_contain_copy:
+                must_contain_copy.remove(child[0])
 
-            result += self.get_possible_words_helper(child[1], prefix_string + child[0], must_contain.copy())
+            result += self.get_possible_words_helper(child[1], prefix_string + child[0], must_contain_copy)
         return result
 
     def prune(self, guess, guess_results):
+        self.must_contain = set()
         for index in range(5):
             if guess_results[index] == "🟩":
                 self.prune_green(index, guess[index], self.head_node)

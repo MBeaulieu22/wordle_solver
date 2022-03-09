@@ -8,6 +8,9 @@ class GameState:
         self.guess_results = []
         self.won = False
 
+    def game_over(self):
+        return self.won or self.guess_number >= 6
+
     def get_answer_char_dict(self):
         char_dict = {}
         for c in self.answer:
