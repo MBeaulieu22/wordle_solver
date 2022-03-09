@@ -29,21 +29,28 @@ class WordleSolver:
         self.trie.prune(guess, guess_result)
 
     def make_guess(self):
-        if self.state.guess_number < 6:
-            guess = self.get_random_guess()
-            print(guess)
-            self.state.make_guess(guess)
-            print(self.state.guess_results[-1])
-            self.update_trie(guess, self.state.guess_results[-1])
+        guess = self.get_random_guess()
+        self.state.make_guess(guess)
+        self.update_trie(guess, self.state.guess_results[-1])
 
-            if self.state.won:
-                print("You won!")
-            elif self.state.guess_number == self.state.MAX_GUESSES:
-                print("You lost!  Word was: " + self.state.answer)
+
+def play_game():
+    solver = WordleSolver()
+
+    while not solver.state.game_over():
+        solver.make_guess()
+    return solver.state
 
 
 if __name__ == '__main__':
-    solver = WordleSolver()
+    win_count = 0
+    for test in range(1000):
+        state = play_game()
+        if state.won:
+            win_count += 1
+        else:
+            print("{} Lost on: {}".format(test, state.answer))
 
-    for x in range(6):
-        solver.make_guess()
+    print("Won {} / 1000 Games!").format(win_count)
+
+
